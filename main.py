@@ -83,11 +83,11 @@ def main():
     for files in prefetchFiles[0]:
         print(files)
         _SAPI.prefetch(files)
-        time.sleep(61)
+        time.sleep(int(config["TimeToWait"]["MULTIPLE_PREFETCH_SECONDS"]))
     for files in prefetchFiles[1]:
         print(files)
         _SAPI.prefetch([files])
-        time.sleep(61)
+        time.sleep(int(config["TimeToWait"]["SINGLE_PREFETCH_SECONDS"]))
 
 
 if __name__ == "__main__":
