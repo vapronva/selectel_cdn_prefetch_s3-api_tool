@@ -50,8 +50,10 @@ class Utils:
     ) -> Tuple[List[List[str]], List[str]]:
         files = [file for file in files if file.startswith("hls/")]
         multiFiles, singleFiles = [], files
+        EXTENSIONS_TO_PREFETCH = config["FilesFilter"]["EXTENSIONS_MULTIPLE_PREFETCH"].split(",")
+        EXTENSIONS_TO_PREFETCH = EXTENSIONS_TO_PREFETCH[:-1] if EXTENSIONS_TO_PREFETCH[-1] == "" else EXTENSIONS_TO_PREFETCH
         for file in files:
-            if file.endswith(config["FilesFilter"]["EXTENSIONS_MULTIPLE_PREFETCH"]):
+            if file.endswith(tuple(EXTENSIONS_TO_PREFETCH)):
                 multiFiles.append(file)
                 singleFiles.remove(file)
         return (
