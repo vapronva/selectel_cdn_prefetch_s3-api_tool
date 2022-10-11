@@ -65,11 +65,11 @@ class Utils:
         return (
             list(
                 Utils.split_in_chunks_of(
-                    Utils.add_slash_at_the_start(multiFiles),
+                    Utils.add_slash_at_the_start(sorted(multiFiles)),
                     int(config["FilesFilter"]["MULTIPLE_PREFETCH_MAX_AMOUNT"]),
                 )
             ),
-            Utils.add_slash_at_the_start(singleFiles),
+            Utils.add_slash_at_the_start(sorted(singleFiles)),
         )
 
     @staticmethod
