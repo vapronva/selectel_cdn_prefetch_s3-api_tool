@@ -50,8 +50,14 @@ class Utils:
     ) -> Tuple[List[List[str]], List[str]]:
         files = [file for file in files if file.startswith("hls/")]
         multiFiles, singleFiles = [], files
-        EXTENSIONS_TO_PREFETCH = config["FilesFilter"]["EXTENSIONS_MULTIPLE_PREFETCH"].split(",")
-        EXTENSIONS_TO_PREFETCH = EXTENSIONS_TO_PREFETCH[:-1] if EXTENSIONS_TO_PREFETCH[-1] == "" else EXTENSIONS_TO_PREFETCH
+        EXTENSIONS_TO_PREFETCH = config["FilesFilter"][
+            "EXTENSIONS_MULTIPLE_PREFETCH"
+        ].split(",")
+        EXTENSIONS_TO_PREFETCH = (
+            EXTENSIONS_TO_PREFETCH[:-1]
+            if EXTENSIONS_TO_PREFETCH[-1] == ""
+            else EXTENSIONS_TO_PREFETCH
+        )
         for file in files:
             if file.endswith(tuple(EXTENSIONS_TO_PREFETCH)):
                 multiFiles.append(file)
@@ -82,10 +88,14 @@ def main():
     prefetchFiles = Utils.get_files_for_prefetching(
         _S3.fetch_files(config["S3Storage"]["BUCKET_NAME"])
     )
+    TIMES_TO_REPEAT_MULTIPLE_PREFETCH = int(
+        config["TimeToWait"]["REPEAT_REQUEST_MULTIPLE_TIMES"]
+    )
     for files in prefetchFiles[0]:
         print(files)
-        _SAPI.prefetch(files)
-        time.sleep(int(config["TimeToWait"]["MULTIPLE_PREFETCH_SECONDS"]))
+        for _ in range(TIMES_TO_REPEAT_MULTIPLE_PREFETCH):
+            _SAPI.prefetch(files)
+            time.sleep(int(config["TimeToWait"]["MULTIPLE_PREFETCH_SECONDS"]))
     for files in prefetchFiles[1]:
         print(files)
         _SAPI.prefetch([files])
