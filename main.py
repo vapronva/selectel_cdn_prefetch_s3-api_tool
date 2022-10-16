@@ -2,7 +2,6 @@ from configparser import ConfigParser
 from typing import Generator, List, Tuple
 import requests
 from boto3 import session as boto3_session
-from defusedxml.ElementTree import fromstring as xml_fromstring
 import time
 
 config = ConfigParser()
@@ -101,11 +100,11 @@ def main():
     for files in prefetchFiles[0]:
         print(files)
         for _ in range(TIMES_TO_REPEAT_MULTIPLE_PREFETCH):
-            # _SAPI.prefetch(files)
+            _SAPI.prefetch(files)
             time.sleep(int(config["TimeToWait"]["MULTIPLE_PREFETCH_SECONDS"]))
     for files in prefetchFiles[1]:
         print(files)
-        # _SAPI.prefetch([files])
+        _SAPI.prefetch([files])
         time.sleep(int(config["TimeToWait"]["SINGLE_PREFETCH_SECONDS"]))
 
 
